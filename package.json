@@ -24,9 +24,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node",
+    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && npx -p typescript tsc --emitDeclarationOnly",
     "test": "bun test",
-    "test:coverage": "bun test --coverage"
+    "prepublishOnly": "bun run test && bun run build"
   },
   "keywords": [
     "nepal",
@@ -51,5 +51,9 @@
   "bugs": {
     "url": "https://github.com/Ranjeet2063/nepal-pay/issues"
   },
-  "homepage": "https://github.com/Ranjeet2063/nepal-pay#readme"
+  "homepage": "https://github.com/Ranjeet2063/nepal-pay#readme",
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "typescript": "^5.3.3"
+  }
 }

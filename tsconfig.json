@@ -9,6 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
+    "types": ["node"],
+    "rootDir": "./src",
     "outDir": "./dist"
   },
   "include": ["src/**/*"]
