@@ -1,0 +1,55 @@
+{
+  "name": "nepal-pay",
+  "version": "1.0.0",
+  "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), and Fonepay. Works with Node.js, Bun, Next.js, and TypeScript.",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target node",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
+  },
+  "keywords": [
+    "nepal",
+    "payment",
+    "esewa",
+    "khalti",
+    "fonepay",
+    "epaisa",
+    "epayment",
+    "gateway",
+    "sdk",
+    "typescript",
+    "nextjs",
+    "fintech"
+  ],
+  "author": "Ranjeet (https://github.com/Ranjeet2063)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ranjeet2063/nepal-pay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ranjeet2063/nepal-pay/issues"
+  },
+  "homepage": "https://github.com/Ranjeet2063/nepal-pay#readme"
+}
