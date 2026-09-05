@@ -20,6 +20,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install Dependencies
+        run: bun install
+
       - name: Run Tests
         run: bun test
 
