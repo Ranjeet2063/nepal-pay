@@ -4,6 +4,7 @@
 
 **Unified, Modern, Type-Safe Nepal Payment Gateway SDK**
 
+[![npm downloads](https://img.shields.io/npm/dt/nepal-pay?color=00d2ff&style=for-the-badge&logo=npm)](https://www.npmjs.com/package/nepal-pay)
 [![npm version](https://img.shields.io/npm/v/nepal-pay?color=cb3837&style=for-the-badge&logo=npm)](https://www.npmjs.com/package/nepal-pay)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-success?style=for-the-badge)](package.json)
