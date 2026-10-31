@@ -7,11 +7,15 @@ import {
   PaymentVerifyResult,
   PaymentStatusOptions,
   PaymentStatusResult,
+  DynamicQrOptions,
+  DynamicQrResult,
 } from './types';
 import { BaseGateway } from './gateways/base';
 import { EsewaGateway } from './gateways/esewa';
 import { KhaltiGateway } from './gateways/khalti';
 import { FonepayGateway } from './gateways/fonepay';
+import { ConnectIpsGateway } from './gateways/connectips';
+import { ImePayGateway } from './gateways/imepay';
 
 export interface InitiateRequest extends PaymentInitOptions {
   gateway?: GatewayProvider;
@@ -31,6 +35,12 @@ export class NepalPay {
     if (config.fonepay) {
       this.gateways.set('fonepay', new FonepayGateway(config.fonepay));
     }
+    if (config.connectips) {
+      this.gateways.set('connectips', new ConnectIpsGateway(config.connectips));
+    }
+    if (config.imepay) {
+      this.gateways.set('imepay', new ImePayGateway(config.imepay));
+    }
 
     this.defaultGateway =
       config.defaultGateway ||
@@ -40,7 +50,11 @@ export class NepalPay {
           ? 'khalti'
           : this.gateways.has('fonepay')
             ? 'fonepay'
-            : undefined);
+            : this.gateways.has('connectips')
+              ? 'connectips'
+              : this.gateways.has('imepay')
+                ? 'imepay'
+                : undefined);
   }
 
   get esewa(): EsewaGateway {
@@ -65,6 +79,22 @@ export class NepalPay {
       throw new Error('Fonepay gateway is not configured. Pass fonepay config to NepalPay constructor.');
     }
     return gw as FonepayGateway;
+  }
+
+  get connectips(): ConnectIpsGateway {
+    const gw = this.gateways.get('connectips');
+    if (!gw) {
+      throw new Error('ConnectIPS gateway is not configured. Pass connectips config to NepalPay constructor.');
+    }
+    return gw as ConnectIpsGateway;
+  }
+
+  get imepay(): ImePayGateway {
+    const gw = this.gateways.get('imepay');
+    if (!gw) {
+      throw new Error('IME Pay gateway is not configured. Pass imepay config to NepalPay constructor.');
+    }
+    return gw as ImePayGateway;
   }
 
   /**
@@ -129,5 +159,13 @@ export class NepalPay {
   ): Promise<PaymentStatusResult> {
     const gw = this.getGateway(gateway);
     return gw.checkStatus(options);
+  }
+
+  /**
+   * Generates an EMVCo-compliant NepalQR string for dynamic mobile banking scan-to-pay.
+   * Delegates to Fonepay gateway standard.
+   */
+  generateDynamicQR(options: DynamicQrOptions): DynamicQrResult {
+    return this.fonepay.generateDynamicQR(options);
   }
 }

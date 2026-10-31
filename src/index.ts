@@ -4,4 +4,8 @@ export * from './gateways/base';
 export * from './gateways/esewa';
 export * from './gateways/khalti';
 export * from './gateways/fonepay';
+export * from './gateways/connectips';
+export * from './gateways/imepay';
 export * from './utils/crypto';
+export * from './next';
+export * from './express';

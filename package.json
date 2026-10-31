@@ -1,7 +1,7 @@
 {
   "name": "nepal-pay",
-  "version": "1.0.0",
-  "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), and Fonepay. Works with Node.js, Bun, Next.js, and TypeScript.",
+  "version": "1.1.0",
+  "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), Fonepay (NepalQR), ConnectIPS (NCHL), and IME Pay. Zero dependencies. Next.js App Router & Express ready.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -15,6 +15,26 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./next": {
+      "import": {
+        "types": "./dist/next.d.ts",
+        "default": "./dist/next.mjs"
+      },
+      "require": {
+        "types": "./dist/next.d.ts",
+        "default": "./dist/next.cjs"
+      }
+    },
+    "./express": {
+      "import": {
+        "types": "./dist/express.d.ts",
+        "default": "./dist/express.mjs"
+      },
+      "require": {
+        "types": "./dist/express.d.ts",
+        "default": "./dist/express.cjs"
+      }
     }
   },
   "files": [
@@ -24,7 +44,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && npx -p typescript tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && bun build ./src/next.ts --outfile ./dist/next.mjs --target node --format esm && bun build ./src/next.ts --outfile ./dist/next.cjs --target node --format cjs && bun build ./src/express.ts --outfile ./dist/express.mjs --target node --format esm && bun build ./src/express.ts --outfile ./dist/express.cjs --target node --format cjs && npx -p typescript tsc --emitDeclarationOnly",
     "test": "bun test",
     "prepublishOnly": "bun run test && bun run build"
   },
@@ -34,6 +54,9 @@
     "esewa",
     "khalti",
     "fonepay",
+    "connectips",
+    "imepay",
+    "nepalqr",
     "epaisa",
     "epayment",
     "gateway",

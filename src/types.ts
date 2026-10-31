@@ -1,5 +1,5 @@
 export type Environment = 'sandbox' | 'live';
-export type GatewayProvider = 'esewa' | 'khalti' | 'fonepay';
+export type GatewayProvider = 'esewa' | 'khalti' | 'fonepay' | 'connectips' | 'imepay';
 
 export type PaymentStatus =
   | 'COMPLETED'
@@ -46,10 +46,30 @@ export interface FonepayConfig {
   returnUrl?: string;
 }
 
+export interface ConnectIpsConfig {
+  merchantId: string;
+  appId: string;
+  appName: string;
+  secretKey: string;
+  environment?: Environment;
+  returnUrl?: string;
+}
+
+export interface ImePayConfig {
+  merchantCode: string;
+  apiUser: string;
+  password: string;
+  module?: string;
+  environment?: Environment;
+  returnUrl?: string;
+}
+
 export interface NepalPayConfig {
   esewa?: EsewaConfig;
   khalti?: KhaltiConfig;
   fonepay?: FonepayConfig;
+  connectips?: ConnectIpsConfig;
+  imepay?: ImePayConfig;
   defaultGateway?: GatewayProvider;
 }
 
@@ -67,6 +87,27 @@ export interface PaymentInitOptions {
   taxAmount?: number;
   serviceCharge?: number;
   deliveryCharge?: number;
+
+  // ConnectIPS & IME Pay specific optional details
+  particulars?: string;
+  remarks?: string;
+}
+
+export interface DynamicQrOptions {
+  amount: number;
+  orderId: string;
+  remarks?: string;
+  merchantName?: string;
+  merchantCode?: string;
+  terminalId?: string;
+}
+
+export interface DynamicQrResult {
+  qrString: string;
+  orderId: string;
+  amount: number;
+  currency: string;
+  merchantName: string;
 }
 
 export interface PaymentInitResult {

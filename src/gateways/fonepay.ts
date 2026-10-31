@@ -10,8 +10,10 @@ import {
   PaymentStatusOptions,
   PaymentStatusResult,
   PaymentStatus,
+  DynamicQrOptions,
+  DynamicQrResult,
 } from '../types';
-import { generateHmacSha512 } from '../utils/crypto';
+import { generateHmacSha512, calculateCrc16, formatTlv } from '../utils/crypto';
 
 export class FonepayGateway extends BaseGateway {
   readonly provider: GatewayProvider = 'fonepay';
@@ -112,6 +114,55 @@ export class FonepayGateway extends BaseGateway {
       orderId: options.orderId,
       amount: options.amount || 0,
       rawResponse: { message: 'Direct status check query requires merchant verification key' },
+    };
+  }
+
+  /**
+   * Generates an EMVCo-compliant NepalQR dynamic QR string.
+   * Can be scanned by any Nepali banking app (Nabil, Global IME, NIC Asia, eSewa, Khalti).
+   */
+  generateDynamicQR(options: DynamicQrOptions): DynamicQrResult {
+    const amount = Number(options.amount);
+    if (isNaN(amount) || amount <= 0) {
+      throw new Error('Payment amount must be a positive number');
+    }
+
+    const merchantCode = options.merchantCode || this.merchantCode;
+    const merchantName = options.merchantName || 'NepalPay Merchant';
+    const amountStr = amount.toFixed(2);
+    const orderId = options.orderId;
+
+    const merchantSubTlv = formatTlv('00', 'NP.FONEPAY.MERCHANT') + formatTlv('01', merchantCode);
+    const merchantAccountInfo = formatTlv('26', merchantSubTlv);
+
+    const additionalSubTlv =
+      formatTlv('01', orderId) +
+      (options.remarks ? formatTlv('05', options.remarks) : '') +
+      (options.terminalId ? formatTlv('07', options.terminalId) : '');
+    const additionalData = formatTlv('62', additionalSubTlv);
+
+    const qrWithoutCrc =
+      formatTlv('00', '01') +
+      formatTlv('01', '12') +
+      merchantAccountInfo +
+      formatTlv('52', '5999') +
+      formatTlv('53', '524') +
+      formatTlv('54', amountStr) +
+      formatTlv('58', 'NP') +
+      formatTlv('59', merchantName) +
+      formatTlv('60', 'Kathmandu') +
+      additionalData +
+      '6304';
+
+    const crc = calculateCrc16(qrWithoutCrc);
+    const finalQrString = qrWithoutCrc + crc;
+
+    return {
+      qrString: finalQrString,
+      orderId,
+      amount,
+      currency: 'NPR',
+      merchantName,
     };
   }
 }

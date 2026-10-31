@@ -1,4 +1,43 @@
-import { createHmac } from 'node:crypto';
+import { createHmac, createHash } from 'node:crypto';
+
+/**
+ * Generate SHA256 hash encoded as Hex or Base64.
+ */
+export function generateSha256(data: string, encoding: 'hex' | 'base64' = 'hex'): string {
+  return createHash('sha256').update(data).digest(encoding);
+}
+
+/**
+ * Calculate standard EMVCo CRC16-CCITT (polynomial 0x1021, init 0xFFFF).
+ * Used by NepalQR and Fonepay dynamic QR codes.
+ * Returns 4-character uppercase hexadecimal string.
+ */
+export function calculateCrc16(data: string): string {
+  let crc = 0xffff;
+  const polynomial = 0x1021;
+
+  for (let i = 0; i < data.length; i++) {
+    const b = data.charCodeAt(i);
+    for (let j = 0; j < 8; j++) {
+      const bit = ((b >> (7 - j)) & 1) === 1;
+      const c15 = ((crc >> 15) & 1) === 1;
+      crc = (crc << 1) & 0xffff;
+      if (c15 !== bit) {
+        crc ^= polynomial;
+      }
+    }
+  }
+
+  return (crc & 0xffff).toString(16).toUpperCase().padStart(4, '0');
+}
+
+/**
+ * Format a Tag-Length-Value (TLV) string for EMVCo / NepalQR specifications.
+ */
+export function formatTlv(tag: string, value: string): string {
+  const len = String(value.length).padStart(2, '0');
+  return `${tag}${len}${value}`;
+}
 
 /**
  * Generate HMAC-SHA256 signature encoded as Base64.
