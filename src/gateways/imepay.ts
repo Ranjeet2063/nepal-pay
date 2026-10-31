@@ -72,6 +72,7 @@ export class ImePayGateway extends BaseGateway {
           Accept: 'application/json',
         },
         body: JSON.stringify(requestPayload),
+        signal: AbortSignal.timeout(3000),
       });
 
       let tokenId = '';
@@ -172,6 +173,7 @@ export class ImePayGateway extends BaseGateway {
             TransactionId: transactionId,
             Msisdn: msisdn,
           }),
+          signal: AbortSignal.timeout(3000),
         });
 
         if (confirmRes.ok) {
@@ -212,6 +214,7 @@ export class ImePayGateway extends BaseGateway {
           RefId: options.orderId,
           TokenId: options.pidx || '',
         }),
+        signal: AbortSignal.timeout(3000),
       });
 
       if (res.ok) {

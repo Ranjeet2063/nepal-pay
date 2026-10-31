@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, it, expect, mock } from 'bun:test';
 import { ConnectIpsGateway } from '../src/gateways/connectips';
 
 describe('ConnectIPS Gateway', () => {
@@ -57,5 +57,36 @@ describe('ConnectIPS Gateway', () => {
     expect(res.success).toBe(false);
     expect(res.status).toBe('FAILED');
     expect(res.message).toContain('Missing TXNID');
+  });
+
+  it('verifies successful payment callback with mocked NCHL validation endpoint', async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = mock(async () => {
+      return new Response(
+        JSON.stringify({
+          status: 'SUCCESS',
+          statusDesc: 'Transaction successful',
+          txnAmt: 250050,
+          txnId: 'NCHL_TXN_9999',
+          bankTxnId: 'BANK_REF_5555',
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }) as any;
+
+    try {
+      const res = await gateway.verify({
+        payload: { TXNID: 'ORDER_NCHL_1234' },
+        amount: 2500.5,
+      });
+
+      expect(res.success).toBe(true);
+      expect(res.status).toBe('COMPLETED');
+      expect(res.orderId).toBe('ORDER_NCHL_1234');
+      expect(res.amount).toBe(2500.5);
+      expect(res.transactionId).toBe('BANK_REF_5555');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });
