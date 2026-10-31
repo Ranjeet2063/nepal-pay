@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NepalPay — Universal Nepal Payment Playground & Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --green: #10b981;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+    header {
+      background: #0f172a;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .badges {
+      display: flex;
+      gap: 8px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 9999px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+    }
+    .badge-green { background: #064e3b; border-color: #059669; color: #34d399; }
+    .container {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); background: #1e293b; }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    input, select {
+      width: 100%;
+      background: #0b0f19;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-green { background: #059669; color: #fff; }
+    .btn-green:hover { background: #047857; }
+    pre {
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      background: #090d16;
+      border: 1px solid #1e293b;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      color: #38bdf8;
+      margin-top: 12px;
+    }
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      color: #000;
+    }
+    canvas {
+      image-rendering: pixelated;
+      max-width: 100%;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span style="font-size: 28px;">🇳🇵</span>
+      <div>
+        <h1>NepalPay Developer Playground</h1>
+        <p style="font-size: 13px; color: var(--text-muted);">Unified Payment Gateway Simulator & Documentation</p>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-green">TypeScript SDK @1.2.0</span>
+      <span class="badge badge-green">Python SDK @1.0.0</span>
+      <span class="badge">Zero Dependencies</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('qr')">📲 NepalQR (EMVCo)</button>
+      <button class="tab-btn" onclick="switchTab('esewa')">💚 eSewa (ePaisa V2)</button>
+      <button class="tab-btn" onclick="switchTab('khalti')">💜 Khalti (V2 ePayment)</button>
+      <button class="tab-btn" onclick="switchTab('connectips')">🏦 ConnectIPS (NCHL)</button>
+    </div>
+
+    <!-- TAB 1: NEPALQR -->
+    <div id="tab-qr" class="tab-content active">
+      <div class="grid">
+        <div class="card">
+          <h2>⚙️ NepalQR Dynamic Generator</h2>
+          <div class="form-group">
+            <label>Merchant Name</label>
+            <input type="text" id="qr-name" value="Patan Coffee House">
+          </div>
+          <div class="form-group">
+            <label>Amount (NPR)</label>
+            <input type="number" id="qr-amount" value="350.00" step="10">
+          </div>
+          <div class="form-group">
+            <label>Merchant City</label>
+            <input type="text" id="qr-city" value="Lalitpur">
+          </div>
+          <div class="form-group">
+            <label>Order / Reference ID</label>
+            <input type="text" id="qr-order" value="ORD-7894">
+          </div>
+          <div class="form-group">
+            <label>Merchant ID</label>
+            <input type="text" id="qr-mid" value="NP01PATANCOFFEE">
+          </div>
+          <button class="btn btn-primary" onclick="generateLiveQR()">⚡ Generate Scannable NepalQR</button>
+        </div>
+
+        <div class="card">
+          <h2>📱 Instant Live QR Code Preview</h2>
+          <div class="qr-container">
+            <canvas id="qr-canvas" width="220" height="220"></canvas>
+            <p id="qr-label" style="margin-top: 10px; font-weight: 700; font-size: 14px;">Scan with eSewa, Khalti, or Mobile Banking</p>
+          </div>
+          <label>EMVCo Compliant String (with CRC16-CCITT):</label>
+          <pre id="qr-raw-payload"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ESEWA -->
+    <div id="tab-esewa" class="tab-content">
+      <div class="grid">
+        <div class="card">
+          <h2>💚 eSewa ePaisa V2 Form Builder</h2>
+          <div class="form-group">
+            <label>Amount (NPR)</label>
+            <input type="number" id="esewa-amount" value="500.00">
+          </div>
+          <div class="form-group">
+            <label>Transaction UUID</label>
+            <input type="text" id="esewa-uuid" value="TXN-ESEWA-001">
+          </div>
+          <div class="form-group">
+            <label>Product Code (Test)</label>
+            <input type="text" id="esewa-code" value="EPAYTEST">
+          </div>
+          <div class="form-group">
+            <label>Secret Key (Test)</label>
+            <input type="text" id="esewa-secret" value="8gBm/:&EnhH.1/q">
+          </div>
+          <button class="btn btn-green" onclick="generateEsewaPayload()">🔐 Calculate HMAC-SHA256 & Test</button>
+        </div>
+
+        <div class="card">
+          <h2>📤 Generated Payload & Form</h2>
+          <label>Signed Fields & Generated Signature:</label>
+          <pre id="esewa-output">// Click "Calculate HMAC-SHA256 & Test" above</pre>
+          <form id="esewa-live-form" method="POST" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" target="_blank" style="margin-top: 16px; display: none;">
+            <input type="hidden" name="amount" id="form-amt">
+            <input type="hidden" name="tax_amount" value="0">
+            <input type="hidden" name="total_amount" id="form-total">
+            <input type="hidden" name="transaction_uuid" id="form-uuid">
+            <input type="hidden" name="product_code" id="form-code">
+            <input type="hidden" name="product_service_charge" value="0">
+            <input type="hidden" name="product_delivery_charge" value="0">
+            <input type="hidden" name="success_url" value="https://nepalpay.dev/success">
+            <input type="hidden" name="failure_url" value="https://nepalpay.dev/failure">
+            <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
+            <input type="hidden" name="signature" id="form-sig">
+            <button type="submit" class="btn btn-primary">🚀 Launch eSewa Sandbox Checkout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: KHALTI -->
+    <div id="tab-khalti" class="tab-content">
+      <div class="grid">
+        <div class="card">
+          <h2>💜 Khalti V2 ePayment Simulator</h2>
+          <div class="form-group">
+            <label>Amount (NPR)</label>
+            <input type="number" id="khalti-amount" value="250.00">
+          </div>
+          <div class="form-group">
+            <label>Purchase Order Name</label>
+            <input type="text" id="khalti-order-name" value="Domain Registration">
+          </div>
+          <div class="form-group">
+            <label>Purchase Order ID</label>
+            <input type="text" id="khalti-order-id" value="ORD-KH-001">
+          </div>
+          <div class="form-group">
+            <label>Live API Endpoint</label>
+            <input type="text" value="https://a.khalti.com/api/v2/epayment/initiate/" readonly>
+          </div>
+          <button class="btn btn-primary" onclick="generateKhaltiPayload()">⚡ Generate cURL & JSON Payload</button>
+        </div>
+
+        <div class="card">
+          <h2>📋 Khalti Initiation Payload (Amount in Paisa)</h2>
+          <pre id="khalti-output"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: CONNECTIPS -->
+    <div id="tab-connectips" class="tab-content">
+      <div class="grid">
+        <div class="card">
+          <h2>🏦 ConnectIPS (NCHL) Interbank</h2>
+          <div class="form-group">
+            <label>Merchant ID</label>
+            <input type="text" id="cips-mid" value="TEST_MERCHANT_01">
+          </div>
+          <div class="form-group">
+            <label>App ID</label>
+            <input type="text" id="cips-app" value="TEST_APP">
+          </div>
+          <div class="form-group">
+            <label>Amount (NPR)</label>
+            <input type="number" id="cips-amt" value="1200.00">
+          </div>
+          <div class="form-group">
+            <label>Transaction ID</label>
+            <input type="text" id="cips-txnid" value="TXN-CIPS-9901">
+          </div>
+          <button class="btn btn-primary" onclick="generateConnectIPSPayload()">🔐 Compute ConnectIPS Token</button>
+        </div>
+
+        <div class="card">
+          <h2>📋 ConnectIPS Form Fields</h2>
+          <pre id="cips-output"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    // CRC16-CCITT for EMVCo
+    function crc16(str) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < str.length; i++) {
+        let code = str.charCodeAt(i);
+        crc ^= (code << 8);
+        for (let j = 0; j < 8; j++) {
+          if (crc & 0x8000) {
+            crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
+          } else {
+            crc = (crc << 1) & 0xFFFF;
+          }
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    function tlv(tag, val) {
+      const len = val.length.toString().padStart(2, '0');
+      return tag + len + val;
+    }
+
+    function generateLiveQR() {
+      const name = document.getElementById('qr-name').value;
+      const amt = parseFloat(document.getElementById('qr-amount').value).toFixed(2);
+      const city = document.getElementById('qr-city').value;
+      const order = document.getElementById('qr-order').value;
+      const mid = document.getElementById('qr-mid').value;
+
+      let payload = "";
+      payload += tlv("00", "01");
+      payload += tlv("01", "12");
+      const sub = tlv("00", "NP.NPI.MERCHANT") + tlv("01", mid);
+      payload += tlv("26", sub);
+      payload += tlv("52", "0000");
+      payload += tlv("53", "116");
+      payload += tlv("54", amt);
+      payload += tlv("58", "NP");
+      payload += tlv("59", name);
+      payload += tlv("60", city);
+      const add = tlv("01", order) + tlv("05", order);
+      payload += tlv("62", add);
+      payload += "6304";
+      const crc = crc16(payload);
+      const full = payload + crc;
+
+      document.getElementById('qr-raw-payload').innerText = full;
+
+      // Draw QR on canvas via quick QR image rendering
+      const canvas = document.getElementById('qr-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 220, 220);
+
+      // Render QR modules using external clean dynamic SVG/canvas
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => ctx.drawImage(img, 10, 10, 200, 200);
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(full)}`;
+    }
+
+    async function generateEsewaPayload() {
+      const amt = parseFloat(document.getElementById('esewa-amount').value).toFixed(2).replace(/\.00$/, '');
+      const uuid = document.getElementById('esewa-uuid').value;
+      const code = document.getElementById('esewa-code').value;
+      const secret = document.getElementById('esewa-secret').value;
+
+      const msg = `total_amount=${amt},transaction_uuid=${uuid},product_code=${code}`;
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+      );
+      const sigBuf = await crypto.subtle.sign('HMAC', key, enc.encode(msg));
+      const sig = btoa(String.fromCharCode(...new Uint8Array(sigBuf)));
+
+      const payload = {
+        amount: amt,
+        total_amount: amt,
+        transaction_uuid: uuid,
+        product_code: code,
+        signed_field_names: "total_amount,transaction_uuid,product_code",
+        signature: sig,
+        success_url: "https://nepalpay.dev/success",
+        failure_url: "https://nepalpay.dev/failure"
+      };
+
+      document.getElementById('esewa-output').innerText = JSON.stringify(payload, null, 2);
+
+      // Form fill
+      document.getElementById('form-amt').value = amt;
+      document.getElementById('form-total').value = amt;
+      document.getElementById('form-uuid').value = uuid;
+      document.getElementById('form-code').value = code;
+      document.getElementById('form-sig').value = sig;
+      document.getElementById('esewa-live-form').style.display = 'block';
+    }
+
+    function generateKhaltiPayload() {
+      const amt = parseFloat(document.getElementById('khalti-amount').value);
+      const paisa = Math.round(amt * 100);
+      const name = document.getElementById('khalti-order-name').value;
+      const id = document.getElementById('khalti-order-id').value;
+
+      const payload = {
+        return_url: "https://example.com/callback",
+        website_url: "https://example.com",
+        amount: paisa,
+        purchase_order_id: id,
+        purchase_order_name: name
+      };
+
+      const curl = `curl -X POST https://a.khalti.com/api/v2/epayment/initiate/ \\
+  -H "Authorization: Key YOUR_KHALTI_SECRET_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '${JSON.stringify(payload, null, 2)}'`;
+
+      document.getElementById('khalti-output').innerText = curl + "\n\n// Payload:\n" + JSON.stringify(payload, null, 2);
+    }
+
+    function generateConnectIPSPayload() {
+      const mid = document.getElementById('cips-mid').value;
+      const app = document.getElementById('cips-app').value;
+      const amt = parseFloat(document.getElementById('cips-amt').value);
+      const paisa = Math.round(amt * 100);
+      const txnid = document.getElementById('cips-txnid').value;
+
+      const payload = {
+        MERCHANTID: mid,
+        APPID: app,
+        APPNAME: "NepalPay",
+        TXNID: txnid,
+        TXNDATE: "31-10-2026",
+        TXNCRNCY: "NPR",
+        TXNAMT: paisa.toString(),
+        REFERENCEID: txnid,
+        REMARKS: "Order Payment",
+        PARTICULARS: "Payment via ConnectIPS"
+      };
+
+      document.getElementById('cips-output').innerText = JSON.stringify(payload, null, 2);
+    }
+
+    // Initialize on load
+    window.onload = () => {
+      generateLiveQR();
+    };
+  </script>
+</body>
+</html>
