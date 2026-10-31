@@ -1,6 +1,6 @@
 {
   "name": "nepal-pay",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), Fonepay (NepalQR), ConnectIPS (NCHL), and IME Pay. Zero dependencies. Next.js App Router & Express ready.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
