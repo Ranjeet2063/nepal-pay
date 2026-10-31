@@ -98,6 +98,7 @@ export interface DynamicQrOptions {
   orderId: string;
   remarks?: string;
   merchantName?: string;
+  merchantCity?: string;
   merchantCode?: string;
   terminalId?: string;
 }

@@ -7,5 +7,6 @@ export * from './gateways/fonepay';
 export * from './gateways/connectips';
 export * from './gateways/imepay';
 export * from './utils/crypto';
+export * from './utils/qr';
 export * from './next';
 export * from './express';

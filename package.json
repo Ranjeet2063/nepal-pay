@@ -1,10 +1,13 @@
 {
   "name": "nepal-pay",
-  "version": "1.1.1",
-  "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), Fonepay (NepalQR), ConnectIPS (NCHL), and IME Pay. Zero dependencies. Next.js App Router & Express ready.",
+  "version": "1.2.0",
+  "description": "Unified, type-safe Nepal payment gateway SDK for eSewa (ePaisa V2), Khalti (V2), Fonepay (NepalQR), ConnectIPS (NCHL), and IME Pay. Zero dependencies. Next.js App Router & Express ready. Includes interactive terminal QR CLI.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "nepal-pay": "./dist/cli.mjs"
+  },
   "exports": {
     ".": {
       "import": {
@@ -44,7 +47,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && bun build ./src/next.ts --outfile ./dist/next.mjs --target node --format esm && bun build ./src/next.ts --outfile ./dist/next.cjs --target node --format cjs && bun build ./src/express.ts --outfile ./dist/express.mjs --target node --format esm && bun build ./src/express.ts --outfile ./dist/express.cjs --target node --format cjs && npx -p typescript tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && bun build ./src/next.ts --outfile ./dist/next.mjs --target node --format esm && bun build ./src/next.ts --outfile ./dist/next.cjs --target node --format cjs && bun build ./src/express.ts --outfile ./dist/express.mjs --target node --format esm && bun build ./src/express.ts --outfile ./dist/express.cjs --target node --format cjs && bun build ./src/cli.ts --outfile ./dist/cli.mjs --target node --format esm && chmod +x ./dist/cli.mjs && npx -p typescript tsc --emitDeclarationOnly",
     "test": "bun test",
     "prepublishOnly": "bun run test && bun run build"
   },

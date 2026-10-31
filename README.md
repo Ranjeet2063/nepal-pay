@@ -9,7 +9,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-success?style=for-the-badge)](package.json)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-28%2F28%20Passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-34%2F34%20Passing-brightgreen?style=for-the-badge)](tests/)
 
 *Integrate eSewa (ePaisa V2), Khalti (ePayment V2), Fonepay (NepalQR), ConnectIPS (NCHL), and IME Pay into your Node.js, Bun, Next.js, or Express app with a single clean API.*
 
@@ -171,6 +171,29 @@ app.all('/api/payment/callback', createExpressPaymentHandler({
   successRedirect: '/success',
   failureRedirect: '/failed',
 }));
+```
+
+---
+
+## 💻 Interactive CLI (`npx nepal-pay`)
+
+Generate terminal NepalQR codes, test gateway signatures, and verify callbacks directly from your command line:
+
+```bash
+# 1. Generate an instant scannable NepalQR code in your terminal
+npx nepal-pay qr --amount 500 --name "Patan Coffee" --order ORD-8899
+
+# 2. Generate eSewa ePaisa V2 test form fields & signature
+npx nepal-pay esewa --amount 750
+
+# 3. Generate ConnectIPS NCHL signed token & form fields
+npx nepal-pay connectips --amount 1500
+
+# 4. Generate Khalti ePayment V2 payload (NPR & Paisa)
+npx nepal-pay khalti --amount 350
+
+# 5. Verify incoming payment callback signature
+npx nepal-pay verify --gateway esewa --data "<base64_encoded_callback>"
 ```
 
 ---

@@ -141,6 +141,8 @@ export class FonepayGateway extends BaseGateway {
       (options.terminalId ? formatTlv('07', options.terminalId) : '');
     const additionalData = formatTlv('62', additionalSubTlv);
 
+    const merchantCity = options.merchantCity || 'Kathmandu';
+
     const qrWithoutCrc =
       formatTlv('00', '01') +
       formatTlv('01', '12') +
@@ -150,7 +152,7 @@ export class FonepayGateway extends BaseGateway {
       formatTlv('54', amountStr) +
       formatTlv('58', 'NP') +
       formatTlv('59', merchantName) +
-      formatTlv('60', 'Kathmandu') +
+      formatTlv('60', merchantCity) +
       additionalData +
       '6304';
 
