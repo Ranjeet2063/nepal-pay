@@ -47,7 +47,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && bun build ./src/next.ts --outfile ./dist/next.mjs --target node --format esm && bun build ./src/next.ts --outfile ./dist/next.cjs --target node --format cjs && bun build ./src/express.ts --outfile ./dist/express.mjs --target node --format esm && bun build ./src/express.ts --outfile ./dist/express.cjs --target node --format cjs && bun build ./src/cli.ts --outfile ./dist/cli.mjs --target node --format esm && chmod +x ./dist/cli.mjs && npx -p typescript tsc --emitDeclarationOnly",
+    "build": "node init && bun build ./src/index.ts --outfile ./dist/index.mjs --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && bun build ./src/next.ts --outfile ./dist/next.mjs --target node --format esm && bun build ./src/next.ts --outfile ./dist/next.cjs --target node --format cjs && bun build ./src/express.ts --outfile ./dist/express.mjs --target node --format esm && bun build ./src/express.ts --outfile ./dist/express.cjs --target node --format cjs && bun build ./src/cli.ts --outfile ./dist/cli.mjs --target node --format esm && chmod +x ./dist/cli.mjs && npx -p typescript tsc --emitDeclarationOnly",
     "test": "bun test",
     "prepublishOnly": "bun run test && bun run build"
   },
@@ -80,6 +80,8 @@
   "homepage": "https://github.com/Ranjeet2063/nepal-pay#readme",
   "devDependencies": {
     "@types/node": "^26.4.1",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^3.3.2",
     "typescript": "^5.3.3"
   }
 }
